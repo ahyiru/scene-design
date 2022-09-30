@@ -1,0 +1,152 @@
+import {useState, useEffect, useRef} from 'react';
+import {Dropdown, Menu, Button, Tag, Upload, message} from 'antd';
+import {FontColorsOutlined, BgColorsOutlined} from '@ant-design/icons';
+import {loadBase64} from '@huxy/utils';
+import {useIntls} from '@app/components/intl';
+
+import {colorCfg, sizeCfg, imgList, img, canvasI18n} from '../configs';
+
+import draw from './draw';
+
+import './index.less';
+
+// const {useEleResize}=use;
+
+const ToolsBar = ({actions, defCfg, beforeUpload, imgUrl, rmImg, i18nCfg}) => {
+  const [color, setColor] = useState(defCfg.color);
+  const [size, setSize] = useState(defCfg.size);
+  const [type, setType] = useState(defCfg.type);
+
+  const handleColorMenuClick = value => {
+    setType('draw');
+    actions.color(value.key);
+    setColor(colorCfg.find(item => item.key === value.key));
+  };
+  const handleSizeMenuClick = value => {
+    setType('draw');
+    actions.size(value.key);
+    setSize(sizeCfg.find(item => item.key === value.key));
+  };
+
+  const colorMenu = (
+    <Menu onClick={handleColorMenuClick}>
+      {colorCfg.map(item => (
+        <Menu.Item key={item.key} icon={<BgColorsOutlined style={{color: type === 'draw' ? item.key : ''}} />}>
+          <Tag color={item.key}>{i18nCfg[item.name]}</Tag>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+  const sizeMenu = (
+    <Menu onClick={handleSizeMenuClick}>
+      {sizeCfg.map(item => (
+        <Menu.Item key={item.key} icon={<FontColorsOutlined />}>
+          {i18nCfg[item.name]}
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+  return (
+    <div className="tools-area">
+      <Dropdown.Button trigger={['click']} overlay={colorMenu} icon={<BgColorsOutlined style={{color: type === 'draw' ? color.key : ''}} />}>
+        <span style={{color: type === 'draw' ? color.key : ''}}>{i18nCfg[color.name]}</span>
+      </Dropdown.Button>
+      <Dropdown.Button trigger={['click']} overlay={sizeMenu} icon={<FontColorsOutlined />}>
+        <span style={{color: type === 'draw' ? 'var(--red2)' : ''}}>{i18nCfg[size.name]}</span>
+      </Dropdown.Button>
+      <Button
+        onClick={() => {
+          actions.text();
+          setType('text');
+        }}
+      >
+        <span style={{color: type === 'text' ? 'var(--red2)' : ''}}>{i18nCfg.add_text}</span>
+      </Button>
+      <Button
+        // disabled={imgUrl}
+        onClick={() => {
+          actions.eraser();
+          setType('eraser');
+        }}
+      >
+        <span style={{color: type === 'eraser' ? 'var(--red2)' : ''}}>{i18nCfg.eraser}</span>
+      </Button>
+      <Button onClick={() => actions.undo()}>{i18nCfg.undo}</Button>
+      <Button onClick={() => actions.redo()}>{i18nCfg.redo}</Button>
+      <Button
+        // disabled={imgUrl}
+        onClick={() => {
+          actions.clean();
+          setType('draw');
+        }}
+      >
+        {i18nCfg.clean_canvas}
+      </Button>
+      <Button
+        onClick={() => {
+          actions.save(); /* setType('draw'); */
+        }}
+      >
+        {i18nCfg.save_canvas}
+      </Button>
+      <Upload maxCount={1} beforeUpload={file => beforeUpload(file, () => setType('draw'))} showUploadList={false}>
+        <Button>{i18nCfg.replace_pic}</Button>
+      </Upload>
+      <Button
+        onClick={() => {
+          rmImg();
+          setType('draw');
+        }}
+      >
+        {i18nCfg.clean_pic}
+      </Button>
+    </div>
+  );
+};
+
+const Index = props => {
+  const getIntls = useIntls();
+  const [imgUrl, setImgUrl] = useState(img);
+  const [actions, setActions] = useState();
+  const defCfg = {color: colorCfg[0], size: sizeCfg[0], type: 'draw'};
+  const container = useRef();
+  const canvas = useRef();
+  const imgCanvas = useRef();
+  // const {width,height}=useEleResize(container.current);
+  useEffect(() => {
+    canvas.current.width = container.current.clientWidth;
+    canvas.current.height = container.current.clientHeight;
+    const {destroy, ...rest} = draw(canvas.current, {...defCfg, color: defCfg.color.key, size: defCfg.size.key}, imgCanvas.current, imgUrl);
+    setActions(rest);
+    return () => destroy();
+  }, [imgUrl]);
+  const beforeUpload = async (file, cb) => {
+    const isImg = imgList.includes(file.type);
+    const isLt8M = file.size / 1024 / 1024 < 8;
+    if (!isImg) {
+      message.error(getIntls('main.canvas.up_image_msg', canvasI18n.up_image_msg));
+      return false;
+    }
+    if (!isLt8M) {
+      message.error(getIntls('main.canvas.up_image_size_msg', canvasI18n.up_image_size_msg));
+      return false;
+    }
+    const imgUrl = await loadBase64(file);
+    setImgUrl(imgUrl);
+    cb();
+    return false;
+  };
+  return (
+    <div className="page">
+      <div className="tools-bar">
+        {actions && <ToolsBar actions={actions} defCfg={defCfg} beforeUpload={beforeUpload} imgUrl={imgUrl} rmImg={() => setImgUrl(null)} i18nCfg={getIntls('main.canvas', canvasI18n)} />}
+      </div>
+      <div ref={container} className="canvas-container">
+        <canvas ref={imgCanvas} />
+        <canvas ref={canvas} />
+      </div>
+    </div>
+  );
+};
+
+export default Index;
