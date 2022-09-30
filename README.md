@@ -19,7 +19,7 @@
 
 场景可能是一个功能模块、工具、内容展示、信息交互等。一个需求可以有多个展示场景，可以根据喜好、心情、环境等作出不同设计。
 
-场景是可能是一个简单的模型，描述了复杂的现象。
+场景可能是一个简单的模型，描述了复杂的现象。
 
 ### 功能
 
@@ -79,7 +79,7 @@
 
 `routes.js` ：
 
-```js
+```javascript
 const routes = [
   {
     path: '/apis',
@@ -119,7 +119,7 @@ export default routes;
 
 `configs.js` ：
 
-```js
+```javascript
 import apis from '@app/utils/getApis';
 import * as configs from '@app/utils/configs';
 import * as rules from '@app/utils/rules';
@@ -148,7 +148,7 @@ export const formRules = rules;
 
 #### 路由配置
 
-```js
+```javascript
 import {browserRouter} from '@app/configs';
 import lowCodeRoutes from '@scenes/modules/lowCode/routes';
 import apisRoutes from '@scenes/modules/apis/routes';
@@ -223,4 +223,4 @@ export default scenesRoutes;
 
 ```
 
-[项目地址](https://github.com/ahyiru/scene-design)
+[项目地址](https://github.com/ahyiru/scene-design).
