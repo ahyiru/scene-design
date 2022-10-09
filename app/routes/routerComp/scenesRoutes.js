@@ -7,6 +7,8 @@ import ConfigLayout from '@scenes/modules/configLayout/src';
 import CanvasTest from '@scenes/modules/canvas/src';
 import ChartTest from '@scenes/modules/charts/src';
 
+import slateRoutes from '@scenes/modules/slate/routes';
+
 import Panel from '@app/components/panel';
 // import Back from '@app/components/goBack';
 
@@ -47,6 +49,7 @@ const scenesRoutes = [
           ...apisRoutes,
           ...userRoutes,
           ...configListRoutes,
+          ...slateRoutes,
           {
             path: '/configLayout',
             name: '框架配置',

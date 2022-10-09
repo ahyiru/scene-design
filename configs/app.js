@@ -12,7 +12,7 @@ const app = {
   },
   MOCK: '127.0.0.1:7002',
   SERVER_PORT: 7003,
-  projectName: 'scenes_design',
+  projectName: 'scene design',
   defProject: {
     name: '场景设计',
     _id: '6098f12b099e1202a287acad',
