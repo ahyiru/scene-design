@@ -1,7 +1,7 @@
 import {traverItem} from '@huxy/utils';
-
+import Icon from '@app/components/icon';
 import staticRoutes from './routerComp/staticRoutes';
-// import {sceneRoutes} from './routerComp/dynamicRoutes';
+import dynamicRoutes from './routerComp/dynamicRoutes';
 
 import sceneRoutes from '@app/views/design/routes';
 
@@ -9,7 +9,7 @@ const allRoutes = [
   {
     path: '/',
     component: () => import('@commons/layout'),
-    children: sceneRoutes,
+    children: [...sceneRoutes, ...dynamicRoutes],
   },
   ...staticRoutes,
 ];
@@ -21,6 +21,7 @@ const routes = (nameList, routerList) =>
       .join('')
       .replace('//', '/');
     item.name = nameList?.[fullPath] ?? item.name;
+    item.icon = item.icon ? <Icon icon={item.icon} /> : item.icon;
     item.id = item.id ?? routerList?.find(route => route.path === fullPath)?._id;
     /* if (typeof item.componentPath === 'string') {
       item.component = () => import(`@app/views${item.componentPath}`);

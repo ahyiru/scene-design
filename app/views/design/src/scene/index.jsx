@@ -114,7 +114,7 @@ const Index = props => {
         <Col>
           <Panel>
             {/* <Table pagination={pagination} rowSelection={rowSelection} columns={columns} dataSource={list ?? []} loading={isPending} size="small" bordered rowKey="_id" scroll={{x: true}} /> */}
-            <Row gutter={10}>
+            <Row gutter={[16, 16]}>
               {
                 (list || []).map(item => <Col key={item._id} span={3} xs={12} sm={6}>
                   <div className="scene-item">

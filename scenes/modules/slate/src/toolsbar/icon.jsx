@@ -12,7 +12,7 @@ const Index = ({icon, name, format, active, className, dropList, defaultValue, o
   const cls = className ? `${activeCls} ${className}` : activeCls;
 
   if (dropList?.length) {
-    return <a {...rest} className={`tools-bar-icon${cls}`} tooltips={selectedKey}>
+    return <a {...rest} className={`tools-bar-icon${cls}`} tooltip={selectedKey}>
       {
         rest.disabled ? selectedKey : <Drop type="vertical" dropList={
           <ul className="icon-drop-area">
@@ -35,7 +35,7 @@ const Index = ({icon, name, format, active, className, dropList, defaultValue, o
   }
 
   return (
-    <a {...rest} className={`tools-bar-icon${cls}`} tooltips={name} onMouseDown={rest.disabled ? null : onClick}>
+    <a {...rest} className={`tools-bar-icon${cls}`} tooltip={name} onMouseDown={rest.disabled ? null : onClick}>
       <Icon icon={icon} />
     </a>
   );

@@ -1,6 +1,6 @@
 const routes = [
   {
-    path: '/richText',
+    path: '/slate',
     name: '编辑器',
     icon: 'ico-flag',
     component: () => import('./src'),
