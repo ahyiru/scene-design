@@ -40,8 +40,8 @@ const userInfo = (user, right) => {
   if (user._id) {
     return {
       key: 'username',
-      name: user?.name ?? right?.user,
-      img: user?.avatar ?? defUser,
+      name: user?.name || right?.user,
+      img: user?.avatar || defUser,
       children: [
         {
           key: 'profile',
