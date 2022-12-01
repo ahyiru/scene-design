@@ -24,7 +24,7 @@ const breadStyle = {
 
 const Bread = ({current}) => <ul className="left-bar bread">
   <li><Link to="/">Home</Link></li>
-  {current?.map(({path, name}) => <li key={path}><Link to={path}>{name}</Link></li>)}
+  {current?.filter(({name}) => name).map(({path, name}) => <li key={path}><Link to={path}>{name}</Link></li>)}
 </ul>;
 
 const scenesRoutes = [

@@ -76,8 +76,8 @@ const Index = props => {
     setIsPending(false);
   };
 
-  const onFinish = async values => {
-    if (!checkValues(nameRule, setNameMes)) {
+  const onFinish = async (values, isVisitor) => {
+    if (!isVisitor && !checkValues(nameRule, setNameMes)) {
       return;
     }
     setIsPending(true);
@@ -129,7 +129,7 @@ const Index = props => {
           </Button>
         </div>
         <div style={formItem}>
-          <Button type="button" className="block" onClick={e => props.router.push('/')}>
+          <Button type="button" className="block" onClick={e => onFinish({name: 'test1', password: 'test1234'}, true)}>
             {getIntls('login.visitor')}
           </Button>
         </div>
